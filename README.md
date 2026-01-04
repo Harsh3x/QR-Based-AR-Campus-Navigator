@@ -60,8 +60,11 @@ pip install -r requirements.txt
 ### 3️⃣ Configure MySQL Database
 
 DB_HOST = "localhost"
+
 DB_USER = "root"
+
 DB_PASSWORD = "your_password"
+
 DB_NAME = "campus_navigator"
 
 ### 4️⃣ Run the Flask server
@@ -84,5 +87,6 @@ Flask fetches corresponding data from MySQL
 Location details are rendered as AR overlays
 
 ## 👨‍💻 Contributors
-Harsh
+Harsh 
+
 Hammas
