@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Control Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --neon-cyan: #00d2ff;
+      --glass-bg: rgba(10, 16, 30, 0.85);
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #020408;
+      background-image:
+        linear-gradient(rgba(0,210,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,210,255,0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      font-family: 'Rajdhani', sans-serif;
+      color: white;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .dashboard {
+      width: 90%;
+      max-width: 1000px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-size: 80px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+    }
+
+    .admin-card {
+      background: var(--glass-bg);
+      border: 1px solid rgba(0,210,255,0.3);
+      backdrop-filter: blur(10px);
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.25s ease;
+      position: relative;
+    }
+
+    .admin-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 2px solid transparent;
+      transition: 0.25s ease;
+    }
+
+    .admin-card:hover::after {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 30px rgba(0,210,255,0.4);
+    }
+
+    .admin-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .admin-card span {
+      display: block;
+      font-size: 14px;
+      color: #8faed8;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .admin-card h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 2px;
+      color: white;
+    }
+
+    .admin-email {
+    text-align: center;
+    margin-top: -25px;
+    margin-bottom: 35px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #9fb3d8;
+    }
+
+    .admin-email span {
+    color: var(--neon-cyan);
+    font-weight: 600;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        }
+
+
+    .logout-btn {
+        padding: 8px 16px;
+        border: 1px solid var(--neon-cyan);
+        color: var(--neon-cyan);
+        text-decoration: none;
+        font-size: 18px;
+        letter-spacing: 1px;
+        transition: 0.2s ease;
+        }
+
+    .logout-btn:hover {
+        background: var(--neon-cyan);
+        color: black;
+        box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <div class="top-bar">
+        
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+
+
+    <h1>Admin Control Panel</h1>
+
+    <p class="admin-email">
+  Logged in as <span>{{ admin_email }}</span>
+    </p>
+
+
+    <div class="card-grid">
+
+      <div class="admin-card" onclick="location.href='/admin/building'">
+        <span>Structure</span>
+        <h2>Add Building</h2>
+      </div>
+
+      <div class="admin-card" onclick="location.href='/admin/room'">
+        <span>Spatial Node</span>
+        <h2>Add Room</h2>
+      </div>
+
+      <div class="admin-card" onclick="location.href='/admin/faculty'">
+        <span>Personnel</span>
+        <h2>Add Faculty</h2>
+      </div>
+
+      <div class="admin-card" onclick="location.href='/admin/event'">
+        <span>Timeline</span>
+        <h2>Add Event</h2>
+      </div>
+
+      <div class="admin-card" onclick="location.href='/admin/student'">
+        <span>Identity</span>
+        <h2>Add Student</h2>
+    </div>
+
+    <div class="admin-card" onclick="location.href='/admin/student-note'">
+        <span>Annotations</span>
+        <h2>Add Student Note</h2>
+    </div>
+
+
+
+    </div>
+  </div>
+
+</body>
+</html>

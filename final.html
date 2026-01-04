@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RVCE Campus AR</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --glass-bg: rgba(16, 24, 48, 0.95);
+        --glass-border: rgba(0, 210, 255, 0.6);
+        
+        /* TWO ACCENT COLORS */
+        --accent-blue: #00d2ff;  
+        --accent-green: #34f000; 
+        
+        --text-main: #ffffff;
+        --text-sub: #d0d8e4;
+      }
+
+      .ui-overlay {
+        position: fixed;
+        bottom: 40%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;          
+        max-width: 1200px;   
+        padding: 50px;       
+        border: 6px solid var(--glass-border); 
+        border-radius: 30px; 
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 50px rgba(0, 210, 255, 0.4); 
+        font-family: 'Rajdhani', sans-serif;
+        display: none; 
+        z-index: 10;
+        animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .ui-overlay h2 {
+        margin: 10px 0 5px 0;
+        font-size: 80px; 
+        font-weight: 700;
+        color: var(--accent-blue);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        text-shadow: 0 0 25px rgba(0, 210, 255, 0.8);
+        line-height: 1;
+      }
+
+      .room-subtitle {
+        font-size: 45px;
+        color: white;
+        margin: 0 0 20px 0;
+        font-weight: 500;
+        text-transform: uppercase;
+
+        display: block;              /* 🔧 change */
+        padding-bottom: 16px;        /* 🔧 increase */
+        line-height: 1.25;           /* 🔧 critical */
+
+        letter-spacing: 2px;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+        /*padding-bottom: 10px;
+        display: inline-block;*/
+      }
+
+      .event-container {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .event-item {
+        margin-bottom: 20px;
+        border-left: 4px solid var(--accent-blue);
+        padding-left: 15px;
+      }
+
+      .event-title {
+        font-size: 40px;
+        color: #ffffff;
+        font-weight: bold;
+        display: block;
+      }
+
+      .event-time {
+        font-size: 30px;
+        color: var(--accent-blue);
+        font-weight: 500;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .event-desc {
+        font-size: 30px;
+        color: #d0d8e4;
+        display: block;
+        font-style: italic;
+      }
+
+      .status-container {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        border-bottom: 2px solid rgba(255,255,255,0.2);
+        padding-bottom: 15px;
+      }
+      
+      .status-text {
+        font-size: 30px;
+        font-weight: bold;
+        color: var(--accent-green);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      .status-dot {
+        height: 15px; width:15px;
+        background-color: var(--accent-green);
+        border-radius: 50%;
+        margin-right: 20px;
+        box-shadow: 0 0 20px var(--accent-green);
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes popUp {
+        from { opacity: 0; transform: translate(-50%, 100px) scale(0.9); }
+        to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+      }
+
+      @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.1); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      
+      @media (max-width: 768px) {
+          .ui-overlay { padding: 30px; bottom: 50px; border-width: 4px; }
+          .ui-overlay h2 { font-size: 25px; }
+          .room-subtitle { font-size: 14px; }
+          .event-title { font-size: 14px; }
+          .event-time, .event-desc { font-size: 14px; }
+          .status-text { font-size: 14px; }
+      }
+    </style>
+  </head>
+  
+  <body style="margin: 0; overflow: hidden;">
+    
+    <div id="info-panel" class="ui-overlay">
+      <div class="status-container">
+        <span class="status-dot"></span> 
+        <span class="status-text">Target Locked // Database Synced</span>
+      </div>
+      
+      <h2 id="b-name">SCANNING...</h2>
+      <div id="r-name" class="room-subtitle">LOCATING SECTOR...</div>
+      
+      <div id="b-events" class="event-container">
+          Waiting for database response...
+      </div>
+    </div>
+
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;">
+      <a-marker preset="hiro" id="main-marker">
+        <a-box position="0 0 0" scale="1 1 1" visible="false"></a-box>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+      const markerId = "{{ marker_id }}"; 
+
+      function updateHUD(building, roomName, eventHTML, isError = false) {
+          const hudTitle = document.querySelector('#b-name');
+          const hudRoom = document.querySelector('#r-name');
+          const hudEvents = document.querySelector('#b-events');
+          
+          hudTitle.innerText = building;
+          hudTitle.style.color = isError ? '#ff4444' : '#00d2ff';
+          
+          hudRoom.innerText = roomName; 
+          hudEvents.innerHTML = eventHTML; 
+      }
+
+      fetch(`/api/get_overlay_data/${markerId}`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data.error) {
+                let eventListHTML = "";
+                
+                if (data.events && data.events.length > 0) {
+                    data.events.forEach(event => {
+                        // FIX: We now use the strings formatted by Python
+                        // No new Date() conversion needed!
+                        const timeStr = `${event.start_time_str} - ${event.end_time_str}`;
+
+                        eventListHTML += `
+                        <div class="event-item">
+                            <span class="event-title">${event.name.toUpperCase()}</span>
+                            <span class="event-time">${timeStr}</span>
+                            <span class="event-desc">${event.description}</span>
+                        </div>`;
+                    });
+                } else {
+                    eventListHTML = "<p style='font-size:30px; color:#d0d8e4'>No active events scheduled.</p>";
+                }
+
+                const roomString = `${data.room_name} [${data.room_number}]`;
+                updateHUD(data.building_name.toUpperCase(), roomString.toUpperCase(), eventListHTML);
+            } else {
+                updateHUD("DATABASE ERROR", "UNKNOWN SECTOR", "<p style='font-size:30px'>Could not retrieve data.</p>", true);
+            }
+        })
+        .catch(err => {
+            console.log("Demo Mode");
+            const demoHTML = `
+                <div class="event-item">
+                    <span class="event-title">DBMS GUEST TALK</span>
+                    <span class="event-time">02:00 PM - 05:00 PM</span>
+                    <span class="event-desc">Information about DBMS systems in industry.</span>
+                </div>`;
+            updateHUD("ISE DEPARTMENT", "ISE SEMINAR HALL [001]", demoHTML);
+        });
+
+      const marker = document.querySelector("#main-marker");
+      const panel = document.querySelector("#info-panel");
+
+      marker.addEventListener("markerFound", () => {
+        panel.style.display = "block";
+      });
+
+      marker.addEventListener("markerLost", () => {
+        panel.style.display = "none";
+      });
+    </script>
+  </body>
+</html>

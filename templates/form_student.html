@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Protocol: Register Student</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --neon-cyan: #00d2ff;
+      --glass-bg: rgba(10, 16, 30, 0.85);
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #020408;
+      background-image:
+        linear-gradient(rgba(0,210,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,210,255,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      font-family: 'Rajdhani', sans-serif;
+      color: white;
+    }
+
+    .hud-card {
+      width: 440px;
+      padding: 40px;
+      background: var(--glass-bg);
+      border: 1px solid rgba(0,210,255,0.35);
+      border-left: 5px solid var(--neon-cyan);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 40px rgba(0,210,255,0.15);
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      font-size: 28px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--neon-cyan);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #8faed8;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(0,210,255,0.25);
+      color: white;
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0,210,255,0.4);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--neon-cyan);
+      color: black;
+      box-shadow: 0 0 20px var(--neon-cyan);
+    }
+  </style>
+</head>
+
+
+
+<body>
+  <div class="hud-card">
+    <h2>Register Student</h2>
+
+    <form id="student-form">
+      <label>University Seat Number (USN)</label>
+      <input  id="usn" type="text" placeholder="1RV23IS053" required>
+
+      <label>Password (Hash / Temp)</label>
+      <input id="password" type="password" placeholder="test123" required>
+
+      <button type="submit">Enroll Student</button>
+    </form>
+  </div>
+</body>
+
+<script>
+document.getElementById("student-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    usn: document.getElementById("usn").value.trim(),
+    password: document.getElementById("password").value
+  };
+
+  const res = await fetch("/api/students", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Student enrolled successfully");
+    e.target.reset();
+  } else {
+    alert(data.error || "Failed to enroll student");
+  }
+});
+</script>
+
+
+
+</html>

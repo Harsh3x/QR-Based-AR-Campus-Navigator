@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Protocol: Register Sector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reusing strict HUD Design Language */
+        :root { --neon-cyan: #00d2ff; --glass-bg: rgba(10, 16, 30, 0.85); }
+        body {
+            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;
+            background: #020408 url('data:image/svg+xml;utf8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h40v40H0z" fill="none" stroke="rgba(0, 210, 255, 0.05)" stroke-width="1"/></svg>');
+            font-family: 'Rajdhani', sans-serif; color: white;
+        }
+        .hud-card {
+            width: 500px; padding: 40px; background: var(--glass-bg);
+            border: 1px solid rgba(0, 210, 255, 0.3); border-left: 5px solid var(--neon-cyan);
+            box-shadow: 0 0 40px rgba(0, 210, 255, 0.1); position: relative;
+        }
+        h2 {
+            margin: 0 0 25px 0; color: var(--neon-cyan); font-size: 28px;
+            text-transform: uppercase; letter-spacing: 3px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
+        }
+        label { display: block; color: #8a9bbd; font-size: 14px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
+        
+        input, select {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid #333; border-bottom: 2px solid var(--neon-cyan);
+            color: white; padding: 12px; font-size: 18px; font-family: inherit; margin-bottom: 20px; box-sizing: border-box; outline: none;
+        }
+        input:focus, select:focus { background: rgba(0, 210, 255, 0.1); }
+        select option { background: #0b1026; color: white; }
+
+        button {
+            width: 100%; padding: 15px; background: var(--neon-cyan); color: #000; border: none;
+            font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        button:hover { background: white; box-shadow: 0 0 20px var(--neon-cyan); }
+    </style>
+</head>
+<body>
+    <div class="hud-card">
+        <h2>Register Room</h2>
+        <form id="room-form">
+            <label>Parent Structure (ID)</label>
+            <select id="building_id">
+                <option value="0">// SELECT PARENT BUILDING</option>
+                <option value="1">ISE DEPARTMENT </option>
+                <option value="2">CSE DEPARTMENT </option>
+            </select>
+
+            <label>Internal Designation (Name)</label>
+            <input id="name" type="text" placeholder="ISE SEMINAR HALL" required>
+
+            <label>Sector ID (Number)</label>
+            <input type="text" id="room_no" placeholder="001" required>
+
+            <button type="submit">Commit to Database</button>
+        </form>
+    </div>
+</body>
+
+
+<script>
+    document.getElementById("room-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const payload = {
+        building_id: document.getElementById("building_id").value,
+        name: document.getElementById("name").value.trim(),
+        room_no: document.getElementById("room_no").value,
+    };
+
+    const res = await fetch("/api/rooms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        alert("Room Registered successfully");
+        document.getElementById("room-form").reset();
+    } else {
+        alert(data.error || "Failed to create event");
+    }
+    });
+    </script>
+
+
+</html>

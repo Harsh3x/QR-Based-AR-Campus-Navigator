@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cyan: #00d2ff;
+      --glass: rgba(10, 16, 30, 0.85);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(circle at top, rgba(0,210,255,0.08), transparent 40%),
+        #020408;
+      font-family: 'Rajdhani', sans-serif;
+      color: white;
+    }
+
+    .login-box {
+      width: 380px;
+      padding: 48px 40px;
+      background: var(--glass);
+      border: 1px solid rgba(0,210,255,0.35);
+      backdrop-filter: blur(14px);
+      text-align: center;
+      box-shadow:
+        0 0 30px rgba(0,210,255,0.25),
+        inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .login-box h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      text-shadow: 0 0 12px rgba(0,210,255,0.6);
+    }
+
+    .login-box p {
+      margin: 0 0 35px;
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: #9fb3d8;
+    }
+
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+
+      width: 100%;
+      padding: 15px;
+      border-radius: 6px;
+
+      border: 2px solid var(--cyan);
+      background: transparent;
+
+      font-size: 17px;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      color: var(--cyan);
+
+      text-decoration: none;
+      cursor: pointer;
+
+      transition: 0.25s ease;
+    }
+
+    .google-btn:hover {
+      background: var(--cyan);
+      color: black;
+      box-shadow: 0 0 25px rgba(0,210,255,0.6);
+      transform: translateY(-2px);
+    }
+
+    .google-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #7f8fa8;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+    <h2>Admin Access</h2>
+    <p>Restricted to RVCE administrators</p>
+
+    <a class="google-btn" href="/login/google">
+      <svg class="google-icon" viewBox="0 0 533.5 544.3">
+        <path fill="#EA4335" d="M533.5 278.4c0-17.4-1.4-34.2-4.1-50.4H272v95.3h147.3c-6.3 34-25 62.8-53.4 82.1v68.3h86.4c50.6-46.6 81.2-115.3 81.2-195.3z"/>
+        <path fill="#34A853" d="M272 544.3c72.6 0 133.5-24.1 178-65.3l-86.4-68.3c-24 16.1-54.7 25.7-91.6 25.7-70.5 0-130.3-47.6-151.7-111.5H31.7v69.9c44.4 88.1 135.6 149.5 240.3 149.5z"/>
+        <path fill="#4A90E2" d="M120.3 324.9c-10.2-30.1-10.2-62.7 0-92.8V162.1H31.7c-43.2 86.4-43.2 187.5 0 273.9l88.6-69.9z"/>
+        <path fill="#FBBC05" d="M272 107.7c39.5-.6 77.5 14 106.5 40.6l79.4-79.4C406.8 23.3 345.9-.5 272 0 167.3 0 76.1 61.4 31.7 149.5l88.6 69.9C141.7 155.3 201.5 107.7 272 107.7z"/>
+      </svg>
+      Login with Google
+    </a>
+
+    <div class="footer-note">
+      Only <strong>@rvce.edu.in</strong> accounts are allowed
+    </div>
+  </div>
+
+</body>
+</html>

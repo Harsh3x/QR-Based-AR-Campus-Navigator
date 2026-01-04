@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Protocol: Add Structure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00d2ff;
+            --glass-bg: rgba(10, 16, 30, 0.85);
+            --input-bg: rgba(0, 210, 255, 0.05);
+        }
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #020408;
+            /* Sci-fi Grid Background */
+            background-image: 
+                linear-gradient(rgba(0, 210, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 210, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            font-family: 'Rajdhani', sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hud-card {
+            width: 450px;
+            padding: 40px;
+            background: var(--glass-bg);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            border-top: 4px solid var(--neon-cyan);
+            border-bottom: 4px solid var(--neon-cyan);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.15);
+            position: relative;
+        }
+
+        /* Decorative Corners */
+        .hud-card::before {
+            content: ''; position: absolute; top: -10px; left: -1px; width: 20px; height: 20px;
+            border-top: 2px solid var(--neon-cyan); border-left: 2px solid var(--neon-cyan);
+        }
+        .hud-card::after {
+            content: ''; position: absolute; bottom: -10px; right: -1px; width: 20px; height: 20px;
+            border-bottom: 2px solid var(--neon-cyan); border-right: 2px solid var(--neon-cyan);
+        }
+
+        h2 {
+            margin: 0 0 20px 0;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+            border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+            padding-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            color: var(--neon-cyan);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-family: 'Rajdhani', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+            margin-bottom: 25px;
+        }
+
+        input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.2), transparent);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: var(--neon-cyan);
+            color: black;
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="hud-card">
+        <h2>Register: Add Building</h2>
+        <form id="building-form">
+            <label>Building Designation</label>
+            <input id="building-name" type="text" placeholder="ISE DEPARTMENT" required>
+            <button type="submit">Initialize Record</button>
+        </form>
+    </div>
+</body>
+
+<script>
+document.getElementById("building-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("building-name").value.trim();
+  if (!name) return;
+
+  const res = await fetch("/api/buildings", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Building added successfully");
+    document.getElementById("building-form").reset();
+  } else {
+    alert("Error adding building");
+  }
+});
+</script>
+
+
+</html>
