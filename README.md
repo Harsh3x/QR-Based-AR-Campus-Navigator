@@ -48,7 +48,7 @@ All tables are normalized to reduce redundancy and ensure efficient querying.
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone the repository
-git clone https://github.com/<your-username>/qr-ar-campus-navigator.git
+git clone https://github.com/Harsh3x/QR-Based-AR-Campus-Navigator
 cd qr-ar-campus-navigator
 
 ### 2️⃣ Create virtual environment and install dependencies
